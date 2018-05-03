@@ -21,7 +21,19 @@
   (quotient y (/ HEIGHT n))
 )
 
-(define (create-image-list datalist result)
+(define square-size-x
+  (/ WIDTH 3)
+)
+
+(define square-size-y
+  (/ HEIGHT 3)
+)
+
+(define (create-image-list datalist)
+  (create-image-list_aux datalist '())
+)  
+
+(define (create-image-list_aux datalist result)
   (cond
     ((empty? datalist)
      result
@@ -39,19 +51,36 @@
   )  
 )
 
-(define (hola n)
-(place-images
-   (create-image-list n '())
-   (list (make-posn 180 200)
-         (make-posn 0 60)
-         (make-posn 140 20)
-         (make-posn 80 140))
-   CANVAS))
+(define (create-image-position datamatrix)
+  (create-image-position_aux datamatrix 0 0 '())
+)
+
+(define (create-image-position_aux datamatrix i j result)
+  (cond
+    ((empty? datamatrix)
+     result
+    )
+    ((empty? (car datamatrix))
+     (create-image-position_aux (cdr datamatrix) (+ i 1) 0 result)
+    )
+    (else
+     (create-image-position_aux (append (list (cdar datamatrix)) (cdr datamatrix)) i (+ 1 j)
+           (append result (list (make-posn (* j square-size-x) (* i square-size-y)))))
+    ) 
+  ) 
+)  
 
 (define (draw-grid n)  
   (place-image (square 100 "outline" "blue") 100 100 CANVAS)
   (place-image (circle 100 "outline" "blue") 200 200 CANVAS)
   (place-image (square 100 "outline" "blue") 300 300 CANVAS)
+
+  #|
+(place-images
+   (create-image-list n)
+   (create-image-position n)
+   CANVAS))
+   |#  
 ) 
 
 (define (process-player-action w x y me)
@@ -82,10 +111,4 @@
       (to-draw draw-grid)
       (on-mouse process-player-action) 
   )    
-)
-
-(define matrix
-  '((0 2 3)
-    (4 5 6)
-    (7 8 9))
 )
