@@ -5,8 +5,9 @@
 ;verificar victoria
 (define (win? matriz num)
   (or (horizontal matriz num) (vertical matriz num)
-       (diagonales1 matriz num) (diagonales2 matriz num))
+       (diagonales matriz num)
   )
+)
 
 ;transponer la matriz
 (define (transpose matriz)
@@ -72,3 +73,7 @@
 (define (diagonales2 matriz num)
   (diagonales1 (invertir matriz) num)
   )
+
+(define (diagonales matriz num)
+  (or (diagonales1 matriz num) (diagonales2 matriz num)
+      (diagonales1 (transpose matriz) num) (diagonales2 (transpose matriz) num)))
