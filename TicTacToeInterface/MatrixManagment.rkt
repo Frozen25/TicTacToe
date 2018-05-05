@@ -83,30 +83,4 @@
   )  
 )
 
-(define matrix
-  '((0 2 3 4)
-    (4 5 6 8)
-    (7 8 1009 0))
-)
-
-(define matrix2
-  '((0 2)
-    (4 5))
-) 
-
 (provide (all-defined-out))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

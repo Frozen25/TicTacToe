@@ -18,6 +18,18 @@
 (define square-size-x (/ WIDTH COLUMN))
 (define square-size-y (/ HEIGHT ROW))
 
+(define (empty-rectangle width height)
+  (rectangle width height "outline" "blue")
+)
+
+(define (o-rectangle width height)
+  (overlay (rectangle width height "outline" "blue") (circle 10 "solid" "red"))
+)
+
+(define (x-rectangle width height)
+  (overlay (rectangle width height "outline" "blue") (overlay (line -30 -40 "blue") (line -30 40 "blue")))
+)
+
 (define (create-image-list datalist)
   (create-image-list_aux datalist '())
 )  
@@ -30,10 +42,13 @@
     (else
      (cond
        ((zero? (car datalist))
-        (create-image-list_aux (cdr datalist) (append result (list (rectangle square-size-x square-size-y "outline" "blue"))))
+        (create-image-list_aux (cdr datalist) (append result (list (empty-rectangle square-size-x square-size-y))))
        )
        ((equal? (car datalist) 1)
-        (create-image-list_aux (cdr datalist) (append result (list (circle 10 "outline" "blue"))))
+        (create-image-list_aux (cdr datalist) (append result (list (o-rectangle square-size-x square-size-y))))
+       )
+       ((equal? (car datalist) 2)
+        (create-image-list_aux (cdr datalist) (append result (list (x-rectangle square-size-x square-size-y))))
        )
        (else
         (create-image-list_aux (cdr datalist) result)
@@ -63,8 +78,7 @@
 )  
 
 (define (draw-grid n)
-  (place-images/align (create-image-list (matrix-to-list n)) (create-image-position n) "left" "top" CANVAS)   
-  ;;(place-image/align (circle 40 "outline" "blue") 150 150 "left" "top" CANVAS)  
+  (place-images/align (create-image-list (matrix-to-list n)) (create-image-position n) "left" "top" CANVAS)
 )
   
 (define (process-player-action w x y me)
@@ -74,12 +88,23 @@
        ((zero? (find-element w (get-y-position y ROW) (get-x-position x COLUMN)))
         (set! TURN (+ TURN 1))
         ;;(modify-matrix w (get-y-position y ROW) (get-x-position x COLUMN)  1)
-        (modify-matrix w (get-x-position x COLUMN) (get-y-position y ROW) 1)
+        (modify-matrix w (get-x-position x COLUMN) (get-y-position y ROW) 2)
        )
        (else
         w
        ) 
      )  
+    )
+    (else
+     w
+    )
+  )  
+)
+
+(define (restart w ke)
+  (cond
+    ((key=? ke "up")
+     (make_matrix ROW COLUMN)
     )
     (else
      w
@@ -97,6 +122,7 @@
       (make_matrix ROW COLUMN)
       (name "Tic-Tac-Toe")
       (to-draw draw-grid)
-      (on-mouse process-player-action) 
+      (on-mouse process-player-action)
+      (on-key restart)
   )    
 )
