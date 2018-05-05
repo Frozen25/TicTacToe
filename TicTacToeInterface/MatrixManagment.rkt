@@ -15,40 +15,27 @@
   )  
 )
 
-(define (modify-matrix matrix i j)
-  (modify_aux '() i j matrix)
-)
-
-(define (modify_aux result i j matrix)
+(define (modify-matrix matrix x y element)  
   (cond
-    ((empty? matrix)
-     (display result)
-     (append (list result) (car matrix))
-    )
-    ((zero? i)
-     (modify_aux_2 result j (car matrix))     
+    ((zero? y)
+     (append (list (modify_aux x element (car matrix))) (cdr matrix)) 
     )
     (else
-     (modify_aux (append result (list (car matrix))) (- i 1) j (cdr matrix))
+     (append (list (car matrix)) (modify-matrix (cdr matrix) x (- y 1) element))
     ) 
   )  
 )
 
-(define (modify_aux_2 result j row)
+(define (modify_aux x element row)
   (cond
-    ((empty? row)
-     result
-    )
-    ((zero? j)
-     ;;(modify_aux_2 (car matrix) (- j 1) (list 1))
-     (display result)
-     (append result (cdr row))
+    ((zero? x)
+     (append (list element) (cdr row))
     )
     (else
-     (modify_aux_2 (append result (list (car row))) (- j 1) (cdr row))
-    ) 
-  ) 
-)  
+     (append (list (car row)) (modify_aux (- x 1) element (cdr row)))
+    )
+  )
+)
 
 (define (find-element matrix i j)  
   (cond
@@ -97,9 +84,14 @@
 )
 
 (define matrix
-  '((0 2 3)
-    (4 5 6)
-    (7 8 1009))
+  '((0 2 3 4)
+    (4 5 6 8)
+    (7 8 1009 0))
+)
+
+(define matrix2
+  '((0 2)
+    (4 5))
 ) 
 
 (provide (all-defined-out))
