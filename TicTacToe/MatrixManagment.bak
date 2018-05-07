@@ -1,0 +1,174 @@
+#lang racket
+
+(define (make_matrix m n)
+ (make-matrix_aux m n '()) 
+)
+
+(define (make-matrix_aux m n result)
+  (cond
+    ((zero? m)
+     result
+    )     
+    (else
+     (make-matrix_aux (- m 1) n (append result (list (make-list n 0))))
+    ) 
+  )  
+)
+
+(define (replace_matrix matrix i j element)
+  (cond
+    ((zero? i)     
+     (cons (replace_list (car matrix) j element) (cdr matrix))
+    )
+    (else
+     ( cons (car matrix) (replace_matrix (cdr matrix) (- i 1) j element ))
+    )
+  )
+)
+
+(define (replace_list list j element)
+  (cond
+    ((zero? j)
+     (cons element (cdr list))
+    )
+    (else
+     (cons(car list) (replace_list (cdr list) (- j 1) element))
+    )
+ )
+)
+
+(define (get_element matrix i j)
+  (cond
+    ((zero? i)
+     (get_aux (car matrix) j)
+    )
+    (else
+     (get_element (cdr matrix) (- i 1) j  )
+    )
+  )
+)
+
+(define (get_aux list j)
+  (cond
+    ((zero? j)
+     (car list)
+    )
+    (else
+     (get_aux (cdr list) (- j 1) )
+    )
+  )
+)
+
+(define (matrix-to-list matrix)
+  (to-list-aux matrix '())
+)
+
+(define (to-list-aux matrix result)
+  (cond
+    ((empty? matrix)
+     result
+    )
+    ((empty? (car matrix))
+     (to-list-aux (cdr matrix) result)
+    )
+    (else
+     (to-list-aux (append (list (cdar matrix)) (cdr matrix)) (append result (list (caar matrix))))
+    ) 
+  )  
+)
+
+;largo de lista
+(define (len lista)
+  (cond ((null? lista) 0)
+        (else
+         (+ 1 (len (cdr lista))))))
+
+
+;Conjunto de Funciones que devuelve el numero de posibilidades de ganar futuras 
+
+;Contar posibilidades '((1 0 0) (2 0 0) (0 0 0))
+
+;Devolver posibilidades de gane futuras
+(define (posibilidades matriz num)
+  (+ (horizontal matriz num 0) (vertical matriz num 0)
+       (diagonales matriz num 0)
+  )
+)
+
+;transponer la matriz
+(define (transpose matriz)
+  (cond((null? matriz) '())
+       ((null? (car matriz)) '())
+       (else( cons (get_column matriz) (transpose (remove_col matriz))))
+   ))
+
+;elimina primera columna
+(define (remove_col matriz)
+  (cond((null? matriz) '())
+       (else(cons (cdar matriz) (remove_col (cdr matriz))))
+  ))
+
+;verifica si hay una fila llena de num
+(define (horizontal matriz num posibilidad)
+  (cond((null? matriz) posibilidad)
+        ((linea_h (car matriz) num) (horizontal (cdr matriz) num (+ posibilidad 1)))
+        (else(horizontal (cdr matriz) num posibilidad))
+   ))
+
+;verifica si hay una columna llena de num
+(define (vertical matriz num posibilidad)
+  (horizontal (transpose matriz) num posibilidad)
+  )
+
+;obtener la primera columna de la matriz
+(define (get_column matriz)
+  (cond((null? matriz) '())
+       (else(cons (caar matriz) (get_column (cdr matriz))))
+   ))
+
+;verifica si todos los elementos en la lista son iguales a num
+(define (linea_h lista num)
+  (cond((null? lista)#t)
+       ((or (equal? (car lista) num) (equal? (car lista) 0)) (linea_h (cdr lista) num))
+       (else #f)
+  ))
+
+;invertir lista/ voltear matriz horizontalmente
+(define (invertir lista )
+  (cond((null? lista) '())
+       (else( append (invertir (cdr lista))  (list(car lista)) ))
+   ))
+
+;verificar diagonal: \
+(define (diagonal matriz num)
+  (cond((null? matriz)#t)
+       ((null? (car matriz)) #t)
+       ((and (or (equal? (caar matriz) num) (equal? (caar matriz) 0)) (not(null? (cdar matriz))) (null? (cdr matriz)) ) #f)
+       ((or (equal? (caar matriz) num) (equal? (caar matriz) 0)) (diagonal (cdr(remove_col matriz)) num) )
+       (else #f)
+   ))
+
+;verificar diagonales: \
+(define (diagonales1 matriz num posibilidad)
+  (cond ((null? matriz) posibilidad)
+        ((diagonal matriz num) (diagonales1 (cdr matriz) num (+ posibilidad 1)))
+        (else (diagonales1 (cdr matriz) num posibilidad))
+  ))
+
+;verificar diagonales /
+(define (diagonales2 matriz num posibilidad)
+  (diagonales1 (invertir matriz) num posibilidad)
+  )
+
+;Main verificar diagonales
+(define (diagonales matriz num posibilidad)
+  (cond ((equal? (len matriz) (len (car matriz))) (/ (+ (diagonales1 matriz num posibilidad) (diagonales2 matriz num posibilidad)
+      (diagonales1 (transpose matriz) num posibilidad) (diagonales2 (transpose matriz) num posibilidad)) 2))
+  (else
+    (+ (diagonales1 matriz num posibilidad) (diagonales2 matriz num posibilidad)
+       (diagonales1 (transpose matriz) num posibilidad) (diagonales2 (transpose matriz) num posibilidad)))))
+
+; Aquí termina el conjunto jeje
+
+(provide (all-defined-out))
+

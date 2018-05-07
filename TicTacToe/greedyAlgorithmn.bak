@@ -1,0 +1,63 @@
+#lang racket
+
+(require "MatrixManagment.rkt")
+(require "verificar_victoria.rkt")
+
+;lista (probabilidad i j)
+;Auxiliar
+(define (listaProbAux matrix i j lista)
+  (cond ((equal? i (len matrix)) (listaProbAux matrix 0 (+ j 1) lista))
+        ((equal? j (len (car matrix))) (reverse lista))
+        ((not (or (equal? (get_element matrix i j) 1) (equal? (get_element matrix i j) 1)))
+         (listaProbAux matrix (+ i 1) j (cons (list (- (posibilidades (replace_matrix matrix i j 2) 1) (posibilidades (replace_matrix matrix i j 2) 2)) i j) lista)))
+        (else
+         (listaProbAux matrix (+ i 1) j lista))))
+
+;Crea una lista con tripletas que contienen (probabilidad i j)
+(define (listaProb matrix)
+  (listaProbAux matrix 0 0 '()))
+
+;Auxiliar que hace todo el brete 
+(define (mejorPosAux ele lista)
+  (cond ((null? lista) ele)
+        ((< (caar lista) (car ele))
+         (mejorPosAux (car lista) (cdr lista)))
+        (else
+         (mejorPosAux ele (cdr lista)))))
+
+;Busca en la lista de probabilidad y posiciones, la tripleta más conveniente para la pc.
+(define (mejorPos lista)
+  (cond ((null? lista) #f)
+        (else
+         (mejorPosAux (car lista) (cdr lista)))))
+
+
+
+;verifica si en alguna posición gana el Usuario
+
+()
+
+(define (someoneWin? matrix num)
+  (userWinAux 0 0 matrix '()))
+
+
+
+
+
+
+(define (greedyAlgorithmnAux matrix lista)
+  (replace_matrix matrix (cadr lista) (caddr lista) 2))
+
+
+(define (greedyAlgorithmn matrix)
+  (cond((not(null? (someoneWin? matrix 1)))
+        )  
+  (else
+   (greedyAlgorithmnAux matrix (mejorPos (listaProb matrix))))))
+
+
+
+
+
+
+;(listaProb'((1 0 0) (0 0 0) (0 0 0)))
