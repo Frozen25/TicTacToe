@@ -120,7 +120,7 @@
 (define (pc-move matrix)
   (cond
     ((equal? (remainder TURN 2) 1)
-     (display "hola")
+     ;(display "hola")
      (set! TURN (+ TURN 1))
      (greedyAlgorithmn matrix)
     )
