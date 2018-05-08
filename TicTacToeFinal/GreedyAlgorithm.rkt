@@ -3,8 +3,6 @@
 (require "MatrixManagment.rkt")
 (require "Game.rkt")
 
-;lista (probabilidad i j)
-
 ;Lo que hace es sustituir temporalmente una posición vacía con el fin de contar las filas, columnas y diagonales que tiene disponibles a futuro como posibilidad de gane, en ese instante.
 (define (listaProbAux matrix i j lista)
   (cond ((equal? i (len (car matrix))) (listaProbAux matrix 0 (+ j 1) lista))

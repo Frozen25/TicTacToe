@@ -1,9 +1,11 @@
 #lang racket
 
+;; Devuelve una matriz de 0 de la cantidad de filas y columnas que se ingresa.
 (define (make_matrix m n)
  (make-matrix_aux m n '()) 
 )
 
+;; Crea una lista por cada fila que se ingreso y a esta lista le agrega una lista del tamaño de las columnas.
 (define (make-matrix_aux m n result)
   (cond
     ((zero? m)
@@ -15,6 +17,8 @@
   )  
 )
 
+;; Toma un elemento y los ingresa en la posición de la matriz que se especifíca. Recorre las filas hasta que encuentra la
+;; que está buscando.
 (define (replace_matrix matrix i j element)
   (cond
     ((zero? i)     
@@ -26,6 +30,7 @@
   )
 )
 
+;; Recorre la fila en la cual está el elemento a modificar y lo cambia.
 (define (replace_list list j element)
   (cond
     ((zero? j)
@@ -37,6 +42,8 @@
  )
 )
 
+;; Devuelve un elemento de la matriz. Recorre las filas hasta que encuentra la
+;; que está buscando.
 (define (get_element matrix i j)
   (cond
     ((zero? i)
@@ -48,6 +55,7 @@
   )
 )
 
+;; Recorre la fila en la cual está el elemento a encontar y lo retorna.
 (define (get_aux list j)
   (cond
     ((zero? j)
@@ -59,10 +67,12 @@
   )
 )
 
+;; Devueleve los elementos de una matriz en una lista.
 (define (matrix-to-list matrix)
   (to-list-aux matrix '())
 )
 
+;; Recorre la matriz y va agregando sus elementos a una lista.
 (define (to-list-aux matrix result)
   (cond
     ((empty? matrix)
@@ -77,6 +87,7 @@
   )  
 )
 
+;; Devuelve el tamaño de la lista.
 (define (len lista)
   (cond ((null? lista) 0)
         (else
@@ -84,9 +95,6 @@
 
 
 ;Conjunto de Funciones que devuelve el numero de posibilidades de ganar futuras 
-
-;Contar posibilidades '((1 0 0) (2 0 0) (0 0 0))
-
 ;Devolver posibilidades de gane futuras
 (define (posibilidades matriz num)
   (+ (horizontalx matriz num 0) (verticalx matriz num 0)
