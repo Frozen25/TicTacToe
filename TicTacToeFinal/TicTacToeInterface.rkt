@@ -50,12 +50,18 @@
 (define (win-msg player)
   (cond    
     ((equal? player (* ROW COLUMN))
+     (set! TURN 0)
+     (set! RT_STOP (list 0))
      (text "Bien jugado \nHemos empatado" 24 "blue")        
     )
     ((equal? (remainder player 2) 1)
+     (set! TURN 0)
+     (set! RT_STOP (list 0))
      (text "Felicidades \nMe has ganado la partida!" 24 "blue")
     )
     (else
+     (set! TURN 0)
+     (set! RT_STOP (list 0))
      (text "Perdiste \nNo te preocupes, no es facíl ganarme" 24 "blue")
     )
   )
