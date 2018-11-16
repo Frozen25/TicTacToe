@@ -1,9 +1,7 @@
 #lang racket
 
 (require "MatrixManagment.rkt")
-(require "verificar_victoria.rkt")
-
-;lista (probabilidad i j)
+(require "Verify.rkt")
 
 ;Lo que hace es sustituir temporalmente una posición vacía con el fin de contar las filas, columnas y diagonales que tiene disponibles a futuro como posibilidad de gane, en ese instante.
 (define (listaProbAux matrix i j lista)
@@ -67,4 +65,3 @@
 
 
 (provide (all-defined-out))
-;(listaProb'((1 0 0) (0 0 0) (0 0 0)))

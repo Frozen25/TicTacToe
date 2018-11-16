@@ -1,1 +1,0 @@
-("6.12" ("3baf3563623614cf5f4f6a47e71f440524cf9da9" . "7e2837e4023d21905903a1f7bc013e6650e7cbaa") #"C:\\Users\\ggg\\Desktop\\TicTacToe\\MatrixManagment.rkt" #"C:\\Users\\ggg\\Desktop\\TicTacToe\\verificar_victoria.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))
